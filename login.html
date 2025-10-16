@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - MindScape Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body data-theme="dark">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <header class="auth-header">
+    <div class="container auth-header-content">
+      <a href="index.html" class="back-link">&larr; Back to Home</a>
+      <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">
+        <span aria-hidden="true">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content" class="auth-main">
+    <div class="auth-container">
+      <div class="auth-card">
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to access your mystical library</p>
+
+        <div id="success-message" class="success-message" role="alert" aria-live="polite" style="display: none;">
+          Registration successful! Please sign in.
+        </div>
+
+        <form id="login-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="identifier" class="form-label">Username or Email</label>
+            <input 
+              type="text" 
+              id="identifier" 
+              name="identifier" 
+              class="form-input" 
+              required 
+              autocomplete="username"
+              aria-describedby="identifier-error"
+            >
+            <div id="identifier-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-input" 
+              required 
+              autocomplete="current-password"
+              aria-describedby="password-error"
+            >
+            <div id="password-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div id="login-error" class="error-message" role="alert" aria-live="polite"></div>
+
+          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </form>
+
+        <p class="auth-footer">
+          Don't have an account? <a href="register.html" class="auth-link">Register here</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="scripts/storage.js"></script>
+  <script src="scripts/validators.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/particles.js"></script>
+  <script>
+    UI.init();
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('span');
+    const currentTheme = document.body.getAttribute('data-theme');
+    themeIcon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = UI.toggleTheme();
+      themeIcon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('registered') === 'true') {
+      const successMsg = document.getElementById('success-message');
+      successMsg.style.display = 'block';
+      UI.announceToScreenReader('Registration successful! Please sign in.');
+    }
+
+    const form = document.getElementById('login-form');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      UI.clearAllErrors(form);
+      
+      const loginError = document.getElementById('login-error');
+      loginError.style.display = 'none';
+
+      const formData = new FormData(form);
+      const credentials = {
+        identifier: formData.get('identifier'),
+        password: formData.get('password')
+      };
+
+      if (!credentials.identifier) {
+        UI.showError('identifier', 'Username or email is required');
+        return;
+      }
+
+      if (!credentials.password) {
+        UI.showError('password', 'Password is required');
+        return;
+      }
+
+      const result = Auth.login(credentials);
+
+      if (!result.success) {
+        loginError.textContent = result.message;
+        loginError.style.display = 'block';
+        UI.announceToScreenReader(result.message);
+      } else {
+        UI.announceToScreenReader('Login successful! Redirecting to your library...');
+        setTimeout(() => {
+          window.location.href = 'library.html';
+        }, 500);
+      }
+    });
+
+    ['identifier', 'password'].forEach(field => {
+      const input = document.getElementById(field);
+      input.addEventListener('blur', () => {
+        UI.clearError(field);
+      });
+    });
+  </script>
+</body>
+</html>

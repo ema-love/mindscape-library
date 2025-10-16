@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - MindScape Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body data-theme="dark">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <header class="auth-header">
+    <div class="container auth-header-content">
+      <a href="index.html" class="back-link">&larr; Back to Home</a>
+      <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">
+        <span aria-hidden="true">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content" class="auth-main">
+    <div class="auth-container">
+      <div class="auth-card">
+        <h1 class="auth-title">Create Your Account</h1>
+        <p class="auth-subtitle">Join MindScape Library and start organizing your collection</p>
+
+        <form id="register-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              class="form-input" 
+              required 
+              autocomplete="username"
+              aria-describedby="username-help username-error"
+            >
+            <small id="username-help" class="form-help">Letters, numbers, and underscores only. No spaces.</small>
+            <div id="username-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="form-input" 
+              required 
+              autocomplete="email"
+              aria-describedby="email-error"
+            >
+            <div id="email-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-input" 
+              required 
+              autocomplete="new-password"
+              aria-describedby="password-help password-error"
+            >
+            <small id="password-help" class="form-help">
+              At least 8 characters with uppercase, lowercase, and number.
+            </small>
+            <div id="password-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              class="form-input" 
+              required 
+              autocomplete="new-password"
+              aria-describedby="confirmPassword-error"
+            >
+            <div id="confirmPassword-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+        </form>
+
+        <p class="auth-footer">
+          Already have an account? <a href="login.html" class="auth-link">Sign in here</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="scripts/storage.js"></script>
+  <script src="scripts/validators.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/particles.js"></script>
+  <script>
+    UI.init();
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('span');
+    const currentTheme = document.body.getAttribute('data-theme');
+    themeIcon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = UI.toggleTheme();
+      themeIcon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    });
+
+    const form = document.getElementById('register-form');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      UI.clearAllErrors(form);
+
+      const formData = new FormData(form);
+      const userData = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        confirmPassword: formData.get('confirmPassword')
+      };
+
+      const result = Auth.register(userData);
+
+      if (!result.success) {
+        UI.showError(result.field, result.message);
+        document.getElementById(result.field).focus();
+      } else {
+        UI.announceToScreenReader('Registration successful! Redirecting to login...');
+        setTimeout(() => {
+          window.location.href = 'login.html?registered=true';
+        }, 500);
+      }
+    });
+
+    ['username', 'email', 'password', 'confirmPassword'].forEach(field => {
+      const input = document.getElementById(field);
+      input.addEventListener('blur', () => {
+        UI.clearError(field);
+      });
+    });
+  </script>
+</body>
+</html>

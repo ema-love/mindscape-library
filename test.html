@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Tests - MindScape Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    .test-section {
+      background: var(--bg-card);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .test-result {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+    }
+    .test-result.pass {
+      background: var(--success-color);
+      color: white;
+    }
+    .test-result.fail {
+      background: var(--error-color);
+      color: white;
+    }
+    .pattern-code {
+      background: var(--bg-secondary);
+      padding: 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      display: block;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <header class="app-header">
+    <div class="container">
+      <a href="index.html" class="back-link">&larr; Back to Home</a>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="container">
+      <h1 class="section-title">Regex Pattern Tests</h1>
+      <p class="section-description">Manual testing of all regex patterns used in MindScape Library</p>
+
+      <div class="test-section">
+        <h2>Username Pattern</h2>
+        <code class="pattern-code">/^[a-zA-Z0-9_]+$/</code>
+        <p>Should accept: letters, numbers, underscores only</p>
+        <div id="username-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Email Pattern</h2>
+        <code class="pattern-code">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>
+        <p>Should match standard email format</p>
+        <div id="email-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Password Pattern (Lookahead)</h2>
+        <code class="pattern-code">/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/</code>
+        <p>Should require: ≥8 chars, uppercase, lowercase, number</p>
+        <div id="password-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Title Pattern</h2>
+        <code class="pattern-code">/^\S(?:.*\S)?$/</code>
+        <p>Should not allow leading/trailing spaces</p>
+        <div id="title-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Pages Pattern</h2>
+        <code class="pattern-code">/^(0|[1-9]\d*)$/</code>
+        <p>Should match non-negative integers</p>
+        <div id="pages-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Date Pattern</h2>
+        <code class="pattern-code">/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/</code>
+        <p>Should match YYYY-MM-DD format</p>
+        <div id="date-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Tag Pattern</h2>
+        <code class="pattern-code">/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/</code>
+        <p>Should match letters with optional spaces or hyphens</p>
+        <div id="tag-tests"></div>
+      </div>
+
+      <div class="test-section">
+        <h2>Author Repeated Surname (Backreference)</h2>
+        <code class="pattern-code">/\b(\w+)\s+\1\b/i</code>
+        <p>Should detect repeated words (e.g., "Smith Smith")</p>
+        <div id="author-tests"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="scripts/validators.js"></script>
+  <script>
+    function runTest(pattern, testCases, elementId) {
+      const container = document.getElementById(elementId);
+      let html = '';
+      
+      testCases.forEach(({ value, expected, description }) => {
+        const result = pattern.test(value);
+        const pass = result === expected;
+        html += `
+          <div class="test-result ${pass ? 'pass' : 'fail'}">
+            ${pass ? '✓' : '✗'} "${value}" - ${description}
+            (Expected: ${expected ? 'MATCH' : 'NO MATCH'}, Got: ${result ? 'MATCH' : 'NO MATCH'})
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    runTest(Validators.patterns.username, [
+      { value: 'user123', expected: true, description: 'valid username' },
+      { value: 'john_doe', expected: true, description: 'with underscore' },
+      { value: 'user name', expected: false, description: 'with space' },
+      { value: 'user@123', expected: false, description: 'with special char' },
+    ], 'username-tests');
+
+    runTest(Validators.patterns.email, [
+      { value: 'user@example.com', expected: true, description: 'valid email' },
+      { value: 'test.name@domain.co.uk', expected: true, description: 'with subdomain' },
+      { value: 'invalid.email', expected: false, description: 'missing @' },
+      { value: '@domain.com', expected: false, description: 'missing local part' },
+    ], 'email-tests');
+
+    runTest(Validators.patterns.password, [
+      { value: 'Password1', expected: true, description: 'valid password' },
+      { value: 'StrongPass123', expected: true, description: 'longer password' },
+      { value: 'password', expected: false, description: 'no uppercase or number' },
+      { value: 'Pass1', expected: false, description: 'too short' },
+    ], 'password-tests');
+
+    runTest(Validators.patterns.title, [
+      { value: 'Grimoire of Shadows', expected: true, description: 'valid title' },
+      { value: 'A', expected: true, description: 'single character' },
+      { value: ' Leading space', expected: false, description: 'leading space' },
+      { value: 'Trailing space ', expected: false, description: 'trailing space' },
+    ], 'title-tests');
+
+    runTest(Validators.patterns.pages, [
+      { value: '0', expected: true, description: 'zero' },
+      { value: '123', expected: true, description: 'positive integer' },
+      { value: '01', expected: false, description: 'leading zero' },
+      { value: '-5', expected: false, description: 'negative' },
+    ], 'pages-tests');
+
+    runTest(Validators.patterns.date, [
+      { value: '2025-10-16', expected: true, description: 'valid date' },
+      { value: '2025-01-01', expected: true, description: 'start of year' },
+      { value: '2025-13-01', expected: false, description: 'invalid month' },
+      { value: '2025-10-32', expected: false, description: 'invalid day' },
+    ], 'date-tests');
+
+    runTest(Validators.patterns.tag, [
+      { value: 'Fantasy', expected: true, description: 'single word' },
+      { value: 'Science-Fiction', expected: true, description: 'with hyphen' },
+      { value: 'Epic Fantasy', expected: true, description: 'with space' },
+      { value: 'Tag123', expected: false, description: 'with numbers' },
+    ], 'tag-tests');
+
+    runTest(Validators.patterns.authorRepeatedSurname, [
+      { value: 'Smith Smith', expected: true, description: 'repeated surname' },
+      { value: 'John John Doe', expected: true, description: 'repeated first name' },
+      { value: 'John Doe', expected: false, description: 'different names' },
+      { value: 'Single', expected: false, description: 'single name' },
+    ], 'author-tests');
+  </script>
+</body>
+</html>

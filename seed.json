@@ -1,0 +1,124 @@
+{
+  "records": [
+    {
+      "id": "rec_0001",
+      "title": "Grimoire of Shadows",
+      "author": "Eldric Moon",
+      "pages": 320,
+      "tag": "Arcane",
+      "dateAdded": "2025-10-01",
+      "createdAt": "2025-10-01T10:00:00.000Z",
+      "updatedAt": "2025-10-01T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0002",
+      "title": "Chronicles of the Ethereal Realm",
+      "author": "Seraphina Nightshade",
+      "pages": 456,
+      "tag": "Fantasy",
+      "dateAdded": "2025-10-03",
+      "createdAt": "2025-10-03T10:00:00.000Z",
+      "updatedAt": "2025-10-03T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0003",
+      "title": "The Alchemist's Codex",
+      "author": "Magnus Goldweaver",
+      "pages": 289,
+      "tag": "Alchemy",
+      "dateAdded": "2025-10-05",
+      "createdAt": "2025-10-05T10:00:00.000Z",
+      "updatedAt": "2025-10-05T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0004",
+      "title": "Whispers from Beyond",
+      "author": "Luna Starbright",
+      "pages": 198,
+      "tag": "Mystical",
+      "dateAdded": "2025-10-08",
+      "createdAt": "2025-10-08T10:00:00.000Z",
+      "updatedAt": "2025-10-08T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0005",
+      "title": "Enchanted Forests and Ancient Spells",
+      "author": "Rowan Thornheart",
+      "pages": 412,
+      "tag": "Fantasy",
+      "dateAdded": "2025-10-10",
+      "createdAt": "2025-10-10T10:00:00.000Z",
+      "updatedAt": "2025-10-10T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0006",
+      "title": "The Prophecy of Starfall",
+      "author": "Celestia Moonwhisper",
+      "pages": 534,
+      "tag": "Epic",
+      "dateAdded": "2025-10-11",
+      "createdAt": "2025-10-11T10:00:00.000Z",
+      "updatedAt": "2025-10-11T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0007",
+      "title": "Mystical Creatures Compendium",
+      "author": "Aldric Beastmaster",
+      "pages": 267,
+      "tag": "Reference",
+      "dateAdded": "2025-10-12",
+      "createdAt": "2025-10-12T10:00:00.000Z",
+      "updatedAt": "2025-10-12T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0008",
+      "title": "The Sorcerer's Apprentice",
+      "author": "Merlin Spellweaver",
+      "pages": 345,
+      "tag": "Arcane",
+      "dateAdded": "2025-10-13",
+      "createdAt": "2025-10-13T10:00:00.000Z",
+      "updatedAt": "2025-10-13T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0009",
+      "title": "Legends of the Crystal Caverns",
+      "author": "Thalia Gemstone",
+      "pages": 278,
+      "tag": "Adventure",
+      "dateAdded": "2025-10-14",
+      "createdAt": "2025-10-14T10:00:00.000Z",
+      "updatedAt": "2025-10-14T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0010",
+      "title": "The Enchanter's Handbook",
+      "author": "Vivienne Charmcaster",
+      "pages": 401,
+      "tag": "Guide",
+      "dateAdded": "2025-10-15",
+      "createdAt": "2025-10-15T10:00:00.000Z",
+      "updatedAt": "2025-10-15T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0011",
+      "title": "Tales of the Twilight Kingdom",
+      "author": "Orion Duskbringer",
+      "pages": 367,
+      "tag": "Fantasy",
+      "dateAdded": "2025-10-16",
+      "createdAt": "2025-10-16T10:00:00.000Z",
+      "updatedAt": "2025-10-16T10:00:00.000Z"
+    },
+    {
+      "id": "rec_0012",
+      "title": "Spellbound: A History of Magic",
+      "author": "Isolde Runekeeper",
+      "pages": 512,
+      "tag": "Historical",
+      "dateAdded": "2025-10-16",
+      "createdAt": "2025-10-16T10:00:00.000Z",
+      "updatedAt": "2025-10-16T10:00:00.000Z"
+    }
+  ]
+}

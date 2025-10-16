@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Library - MindScape Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body data-theme="dark">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <header class="app-header">
+    <div class="container">
+      <h1 class="app-title">MindScape Library</h1>
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">
+          <span aria-hidden="true">🌙</span>
+        </button>
+        <button id="logout-btn" class="btn btn-secondary">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="app-main">
+    <div class="container">
+      <section class="controls-section">
+        <div class="search-bar">
+          <label for="search-input" class="sr-only">Search books</label>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Search by title, author, tag, or pages..."
+            aria-label="Search books by title, author, tag, or pages"
+          >
+        </div>
+
+        <div class="action-buttons">
+          <button id="add-book-btn" class="btn btn-primary">
+            <span aria-hidden="true">+</span> Add Book
+          </button>
+          <button id="stats-btn" class="btn btn-secondary">
+            <span aria-hidden="true">📊</span> Stats
+          </button>
+          <button id="import-btn" class="btn btn-secondary">
+            <span aria-hidden="true">📥</span> Import
+          </button>
+          <button id="export-btn" class="btn btn-secondary">
+            <span aria-hidden="true">📤</span> Export
+          </button>
+        </div>
+      </section>
+
+      <section class="sort-section">
+        <span class="sort-label">Sort by:</span>
+        <button class="sort-btn" data-sort="title" aria-label="Sort by title">
+          Title <span class="sort-arrow"></span>
+        </button>
+        <button class="sort-btn" data-sort="author" aria-label="Sort by author">
+          Author <span class="sort-arrow"></span>
+        </button>
+        <button class="sort-btn" data-sort="pages" aria-label="Sort by pages">
+          Pages <span class="sort-arrow"></span>
+        </button>
+        <button class="sort-btn active desc" data-sort="dateAdded" aria-label="Sort by date added">
+          Date Added <span class="sort-arrow">▼</span>
+        </button>
+      </section>
+
+      <section class="records-section" aria-live="polite" aria-atomic="false">
+        <div id="records-container" class="records-grid">
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="add-edit-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Add Book</h2>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="book-form" class="modal-form" novalidate>
+        <input type="hidden" id="book-id" name="id">
+
+        <div class="form-group">
+          <label for="book-title" class="form-label">Title *</label>
+          <input 
+            type="text" 
+            id="book-title" 
+            name="title" 
+            class="form-input" 
+            required
+            aria-describedby="book-title-error"
+          >
+          <div id="book-title-error" class="error-message" role="alert"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="book-author" class="form-label">Author *</label>
+          <input 
+            type="text" 
+            id="book-author" 
+            name="author" 
+            class="form-input" 
+            required
+            aria-describedby="book-author-error book-author-warning"
+          >
+          <div id="book-author-warning" class="warning-message"></div>
+          <div id="book-author-error" class="error-message" role="alert"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="book-pages" class="form-label">Pages *</label>
+          <input 
+            type="number" 
+            id="book-pages" 
+            name="pages" 
+            class="form-input" 
+            required
+            min="0"
+            aria-describedby="book-pages-error"
+          >
+          <div id="book-pages-error" class="error-message" role="alert"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="book-tag" class="form-label">Tag *</label>
+          <input 
+            type="text" 
+            id="book-tag" 
+            name="tag" 
+            class="form-input" 
+            required
+            placeholder="e.g., Arcane, Fantasy, Historical"
+            aria-describedby="book-tag-error"
+          >
+          <div id="book-tag-error" class="error-message" role="alert"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="book-date" class="form-label">Date Added *</label>
+          <input 
+            type="date" 
+            id="book-date" 
+            name="dateAdded" 
+            class="form-input" 
+            required
+            aria-describedby="book-date-error"
+          >
+          <div id="book-date-error" class="error-message" role="alert"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="stats-modal" class="modal" role="dialog" aria-labelledby="stats-title" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="stats-title">Library Statistics</h2>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="stats-dashboard" class="stats-grid">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary modal-cancel">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="import-modal" class="modal" role="dialog" aria-labelledby="import-title" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="import-title">Import Books</h2>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Upload a JSON file containing your book records:</p>
+        <input type="file" id="import-file" accept=".json" class="file-input">
+        <div id="import-result" class="import-result" role="alert" aria-live="polite"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary modal-cancel">Cancel</button>
+        <button id="import-confirm" class="btn btn-primary">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/storage.js"></script>
+  <script src="scripts/validators.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/search.js"></script>
+  <script src="scripts/state.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/particles.js"></script>
+  <script src="scripts/library.js"></script>
+</body>
+</html>
