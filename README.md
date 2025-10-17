@@ -1,5 +1,7 @@
 # MindScape Library
 
+### **Live Demo**: [MindScapes Library GitHub pages] (https://ema-love.github.io/mindscape-library/)
+
 A mystical, accessible web application for managing your book collection. Built with vanilla HTML, CSS, and JavaScript featuring advanced regex validation, powerful search capabilities, and a magical user interface.
 
 ## Features
