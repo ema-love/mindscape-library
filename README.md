@@ -3,6 +3,8 @@
 ### **Live Demo**: [MindScapes Library GitHub pages] (https://ema-love.github.io/mindscape-library/)
 #### **Video Demo**: [MindScape Library Demo Video] (https://drive.google.com/file/d/15s-5W39lKwXFtDbO22pFM9z5woLhUVkX/view?t=27)
 
+### Mockup: [MindScape Library Mockup Design] (https://www.canva.com/design/DAG2AAByhno/harriCfDwr6blbIrrngkig/edit?utm_content=DAG2AAByhno&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 A mystical, accessible web application for managing your book collection. Built with vanilla HTML, CSS, and JavaScript featuring advanced regex validation, powerful search capabilities, and a magical user interface.
 
 ## Features
